@@ -17,7 +17,7 @@ export function useApiInfiniteQuery<T>({
   queryKey: unknown[];
   params?: QueryParams;
 }) {
-  return useInfiniteQuery<PaginatedResponse<T>, ApiError>({
+  return useInfiniteQuery<PaginatedResponse<T>, ApiError, PaginatedResponse<T>, unknown[], number>({
     queryKey,
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>

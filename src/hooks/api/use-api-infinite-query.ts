@@ -8,6 +8,36 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+/**
+ * Hook for paginated/infinite scroll data with automatic next page loading
+ *
+ * @example
+ * // Infinite scroll posts
+ * const {
+ *   data,
+ *   fetchNextPage,
+ *   hasNextPage,
+ *   isFetchingNextPage,
+ * } = useApiInfiniteQuery({
+ *   endpoint: '/posts',
+ *   queryKey: ['posts'],
+ *   params: { limit: 10 },
+ * });
+ *
+ * // Load more button
+ * <button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+ *   {isFetchingNextPage ? 'Loading...' : 'Load More'}
+ * </button>
+ *
+ * @example
+ * // With filters
+ * const { data } = useApiInfiniteQuery({
+ *   endpoint: '/posts',
+ *   queryKey: ['posts', { category: 'tech' }],
+ *   params: { category: 'tech', limit: 20 },
+ * });
+ */
+
 export function useApiInfiniteQuery<T>({
   endpoint,
   queryKey,

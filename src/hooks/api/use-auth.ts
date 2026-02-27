@@ -143,7 +143,7 @@ export function useLogin() {
   const queryClient = useQueryClient();
 
   return useApiMutation<AuthResponse, LoginDto>({
-    endpoint: '/login',
+    endpoint: '/auth/login',
     method: 'POST',
     options: {
       onSuccess: (response) => {

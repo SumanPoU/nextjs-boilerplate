@@ -1,11 +1,9 @@
-import { env } from '@/config/env';
-
 export class BrowserCryptoService {
   static async encrypt(text: string): Promise<string> {
-    const iv = crypto.getRandomValues(new Uint8Array(env.IV_LENGTH));
+    const iv = crypto.getRandomValues(new Uint8Array(Number(process.env.IV_LENGTH)));
     const key = await crypto.subtle.importKey(
       'raw',
-      new TextEncoder().encode(env.ENCRYPTION_KEY),
+      new TextEncoder().encode(process.env.ENCRYPTION_KEY),
       { name: 'AES-GCM' },
       false,
       ['encrypt'],
@@ -28,12 +26,12 @@ export class BrowserCryptoService {
 
   static async decrypt(data: string): Promise<string> {
     const combined = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
-    const iv = combined.slice(0, env.IV_LENGTH);
-    const encrypted = combined.slice(env.IV_LENGTH);
+    const iv = combined.slice(0, Number(process.env.IV_LENGTH));
+    const encrypted = combined.slice(Number(process.env.IV_LENGTH));
 
     const key = await crypto.subtle.importKey(
       'raw',
-      new TextEncoder().encode(env.ENCRYPTION_KEY),
+      new TextEncoder().encode(process.env.ENCRYPTION_KEY),
       { name: 'AES-GCM' },
       false,
       ['decrypt'],

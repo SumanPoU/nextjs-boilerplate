@@ -16,6 +16,18 @@ export const safeUsername = z
     },
   );
 
+export const safeDisplayName = z
+  .string()
+  .min(1, 'Name is required')
+  .max(64, 'Name too long')
+  .regex(/^[a-zA-Z0-9 .'-]+$/, 'Name contains invalid characters')
+  .refine(
+    (val) => !/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|ALTER|EXEC|UNION)\b)/i.test(val),
+    {
+      message: 'Display name cannot contain SQL keywords',
+    },
+  );
+
 /**
  * Strong password: min 8 chars, max 64, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
  */
@@ -72,6 +84,19 @@ export const SetFirstLoginPasswordSchema = BaseIdentifierSchema.extend({
     path: ['email'],
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  });
+
+// Register
+export const RegisterSchema = z
+  .object({
+    displayName: safeDisplayName,
+    email: z.string().email('Invalid email address'),
+    password: StrongPasswordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
     message: 'Passwords do not match',
   });

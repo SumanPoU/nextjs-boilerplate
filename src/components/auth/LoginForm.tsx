@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '@/store/rootReducer';
 
 import { useForm } from '@tanstack/react-form';
+import { setShowPassword, setRememberMe } from '@/store/slices/auth.slice';
 
 import { LoginFormSchema } from '@/validation/auth';
 import { useLogin } from '@/hooks/api/use-auth';
@@ -16,8 +18,8 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 
 export function Login() {
   const login = useLogin();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState<boolean | 'indeterminate'>(false);
+  const dispatch = useDispatch();
+  const { showPassword, rememberMe } = useSelector((state: RootState) => state.auth);
 
   const form = useForm({
     defaultValues: {
@@ -109,8 +111,8 @@ export function Login() {
 
                       <button
                         type="button"
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+                        onClick={() => dispatch(setShowPassword(!showPassword))}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition cursor-pointer"
                       >
                         {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
                       </button>
@@ -127,11 +129,11 @@ export function Login() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Checkbox
-                checked={isChecked}
-                onCheckedChange={setIsChecked}
+                checked={rememberMe}
+                onCheckedChange={(checked) => dispatch(setRememberMe(checked as boolean))}
                 className="size-5 flex items-center justify-center border rounded-none
                   data-[state=checked]:bg-primary
-                  data-[state=checked]:text-white transition"
+                  data-[state=checked]:text-white transition cursor-pointer"
               >
                 <CheckboxIndicator className="size-3.5" />
               </Checkbox>
@@ -147,7 +149,7 @@ export function Login() {
           <Button
             type="submit"
             disabled={login.isPending}
-            className="w-full h-11 rounded-sm bg-primary text-white font-semibold text-base"
+            className="w-full h-11 rounded-sm bg-primary text-white font-semibold text-base cursor-pointer"
           >
             {login.isPending ? 'Signing in…' : 'Sign In'}
           </Button>
@@ -156,7 +158,7 @@ export function Login() {
         {/* Signup */}
         <div className="text-left text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-primary font-semibold">
+          <Link href="/register" className="text-primary font-semibold">
             Sign Up
           </Link>
         </div>

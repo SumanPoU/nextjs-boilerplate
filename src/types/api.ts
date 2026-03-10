@@ -4,7 +4,7 @@ export interface FieldError {
 }
 
 export interface BackendResponse<T = unknown> {
-  success: boolean;
+  status: 'success' | 'error';
   message: string;
   data?: T;
   errors?: FieldError[];

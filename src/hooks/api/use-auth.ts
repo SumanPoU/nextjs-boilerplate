@@ -50,7 +50,7 @@ export function useRegister() {
   const router = useRouter();
 
   return useApiMutation<AuthResponse, RegisterDto>({
-    endpoint: '/register',
+    endpoint: '/auth/register',
     method: 'POST',
     options: {
       onSuccess: (response) => {

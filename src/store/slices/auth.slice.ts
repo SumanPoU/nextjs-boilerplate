@@ -9,11 +9,15 @@ export type User = {
 type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
+  showPassword: boolean;
+  rememberMe: boolean;
 };
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
+  showPassword: false,
+  rememberMe: false,
 };
 
 const authSlice = createSlice({
@@ -28,8 +32,14 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     },
+    setShowPassword(state, action: PayloadAction<boolean>) {
+      state.showPassword = action.payload;
+    },
+    setRememberMe(state, action: PayloadAction<boolean>) {
+      state.rememberMe = action.payload;
+    },
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, setShowPassword, setRememberMe } = authSlice.actions;
 export default authSlice.reducer;
